@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/layui-style/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="/layui-style/css/public.css" media="all">
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-form layuimini-form" lay-filter="form">
+    <div class="layui-form-item"lay-filter="form">
+        <label class="layui-form-label ">专题名称:&nbsp;&nbsp;</label>
+        <div class="layui-input-block" lay-filter="form">
+            <input type="text" name="subject_title" th:value="${subject.subject_title}" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item  layui-form-text">
+        <label class="layui-form-label">专题描述:&nbsp;&nbsp;</label>
+        <div class="layui-input-block" >
+            <textarea name="subject_desc" class="layui-textarea" th:text="${subject.subject_title}"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item"  layui-ignore>
+        <label class="layui-form-label">专题banner图:&nbsp;&nbsp;</label>
+        <div >
+                <div class="layui-upload">
+                    <input type="file" name="file" id="test1">
+                </div>
+        </div>
+        <div class="layui-upload">
+            <img class="layui-upload-img" src="" id="demo1">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <lable class="layui-form-label">专题状态:&nbsp;&nbsp;</lable>
+        <div class="layui-input-block">
+            <select name="subject_status">
+                <option th:value="${subject.subject_status}" selected="selected">启用</option>
+                <option th:value="${subject.subject_status}">不启用</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">备注信息:&nbsp;&nbsp;</label>
+        <div class="layui-input-block">
+            <textarea name="remark" class="layui-textarea" th:text="${subject.remark}" ></textarea>
+        </div>
+    </div>
+
+        <div style="text-align: right">
+            <button class="layui-btn layui-btn-sm layui-btn-normal" lay-submit lay-filter="saveBtn">保存</button>
+            <button class="layui-btn layui-btn-sm layui-btn-normal"  lay-filter="close">关闭</button>
+        </div>
+
+</div>
+<script src="/layui-style/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['form'], function () {
+        var form = layui.form;
+        var files=this.files,
+            layer = layui.layer,
+            $ = layui.$;
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+                $.ajax({
+                    url:"/dispatcher/updatesubject",
+                    data: data.field,
+                    success:function (msg){
+                        if (msg=true){
+                        }
+                    }
+                });
+
+                var index = layer.alert(JSON.stringify(data.field), {
+                    title: '最终的提交信息',
+                }, function () {
+                    // 关闭弹出层
+                    layer.close(index);
+                    var iframeIndex = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(iframeIndex);
+
+                });
+
+                return false;
+            }
+
+        );
+
+    });
+</script>
+
+<script src="/layui-style/lib/layui-v2.6.3/layui.js"></script>
+<script>
+    layui.config({
+        base: '/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['upload'], function(){
+        var $ = layui.jquery
+            ,form = layui.form
+            ,layer = layui.layer
+            ,upload = layui.upload;
+        //普通图片上传
+        var uploadInst = upload.render({
+            elem: '#test1'
+            ,url: '/dispatcher/file' //改成您自己的上传接口
+            // ,auto:false // 不自动上传
+            // ,bindAction: '#LAY-user-back-submit' // 绑定上传按钮
+            ,accept: 'images' // 只允许上传图片
+            ,acceptMime: 'image/*'  // 打开文件选择器时只显示图片
+            ,choose: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                    $('#demo1').attr('src', result); //图片链接（base64）
+                });
+            }
+            ,done: function(res){
+                //如果上传失败
+                if(res.code < 1){
+                    return layer.msg('上传失败');
+                }
+                return layer.msg('上传成功');
+                //上传成功
+            }
+            ,error: function(){
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function(){
+                    uploadInst.upload();
+                });
+            }
+        });
+    });
+    // const fileU
+</script>
+
+</body>
+</html>

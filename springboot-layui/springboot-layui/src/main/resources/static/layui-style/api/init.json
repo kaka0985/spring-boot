@@ -1,0 +1,33 @@
+{
+  "homeInfo": {
+    "title": "首页",
+    "href": "/dispatcher/toWelcome"
+  },
+  "logoInfo": {
+    "title": "云课堂",
+    "image": "/layui-style/images/tledu.jpg",
+    "href": ""
+  },
+  "menuInfo": [
+    {
+      "title": "常规管理",
+      "icon": "fa fa-address-book",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+          "title": "网课管理",
+          "href": "",
+          "target": "_self",
+          "child": [
+            {
+              "title": "专题管理",
+              "href": "/dispatcher/subject",
+              "target": "_self"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

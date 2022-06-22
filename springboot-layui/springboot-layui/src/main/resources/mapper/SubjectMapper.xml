@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tlyun.mapper.SubjectMapper">
+
+    <select id ="getSubjectList" parameterType="Subject" resultType="Subject">
+        select * from oc_subject
+        <where >
+            <if test="subject_title != null and subject_title != ''">
+                subject_title like concat('%',#{subject_title},'%')
+            </if>
+        </where>
+    </select>
+    <select id="getlistById" parameterType="Integer" resultType="Subject">
+        select * from oc_subject where subject_banner=#{picture}
+    </select>
+    <insert id="insertlist" parameterType="Subject">
+        insert into oc_subject (subject_title,subject_desc,subject_banner,order_by,subject_status,remark) values (#{subject_title},
+            #{subject_desc},#{subject_banner},#{order_by},#{subject_status},#{remark})
+
+    </insert>
+    <update id="updatesubejct" parameterType="Subject">
+        update oc_subject set subject_title=#{subject_title},subject_desc=#{subject_desc},subject_banner=#{subject_banner}
+                                ,subject_status=#{subject_status},remark=#{remark} where subject_id=#{subject_id}
+    </update>
+</mapper>
